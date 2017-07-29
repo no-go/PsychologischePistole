@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Psychologische Pistole</string>
+    <string name="fileErr">File access error</string>
+</resources>
