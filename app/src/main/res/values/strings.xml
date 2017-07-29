@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Psychologische Pistole</string>
     <string name="fileErr">File access error</string>
+    <string name="toWebsite">Mehr von Tino Bomelino im Web</string>
 </resources>

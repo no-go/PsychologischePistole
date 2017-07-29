@@ -2,8 +2,10 @@ package click.dummer.psychologischepistole;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,27 +28,30 @@ import java.util.ArrayList;
 
 public class FaceActivity extends Activity implements SensorEventListener {
     public static String PACKAGE_NAME;
+    public static String LINKURL = "http://bomelino.de/?what=pistoleApp";
 
     SensorManager sensorManager;
     Sensor sensor;
+    boolean fulls = false;
 
     MediaPlayer mp;
 
     ImageView imageView;
+    Button btn;
     ArrayList<Bitmap> bitmaps;
     String[] bitmapNames = {"pengimg.jpg", "normal.jpg"};
     String mp3Name = "peng.mp3";
-    int[] forces = {0, 40, 60};
+    int[] forces = {0, 40, 50};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PACKAGE_NAME = this.getPackageName();
         setContentView(R.layout.face);
+        btn = (Button) findViewById(R.id.button);
         imageView = (ImageView) findViewById(R.id.imageView);
         sensorManager = (SensorManager) getSystemService(Service.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
 
         String path = makeDir();
         if(path != null) {
@@ -62,7 +68,7 @@ public class FaceActivity extends Activity implements SensorEventListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        toggleFullscreen();
+        toFullscreen();
     }
 
     private String makeDir() {
@@ -147,18 +153,34 @@ public class FaceActivity extends Activity implements SensorEventListener {
     private void setBackgrounds() {
         int pixel = bitmaps.get(0).getPixel(0,0);
         imageView.setBackgroundColor(pixel);
+        btn.setBackgroundColor(pixel);
+        btn.setTextColor(Color.rgb(255 - Color.red(pixel), 255 - Color.green(pixel), 255 - Color.blue(pixel)));
+    }
+
+    public void pengNow(View v) {
+        imageView.setImageBitmap(bitmaps.get(0));
+        if (!mp.isPlaying()) {
+            mp.start();
+        }
+    }
+
+    public void website(View v) {
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(LINKURL));
+        startActivity(i);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        toFullscreen();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
+        fulls = false;
     }
 
     @Override
@@ -168,32 +190,33 @@ public class FaceActivity extends Activity implements SensorEventListener {
         if (val < forces[1] && !mp.isPlaying()) {
             imageView.setImageBitmap(bitmaps.get(1));
         } else if (val < forces[2]) {
-            imageView.setImageBitmap(bitmaps.get(0));
-            if (!mp.isPlaying()) {
-                mp.start();
-            }
+            pengNow(new View(this));
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {}
 
-    public void toggleFullscreen() {
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
 
-        if (Build.VERSION.SDK_INT >= 14) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+    public void toFullscreen() {
+        if (!fulls) {
+            int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+            int newUiOptions = uiOptions;
+
+            if (Build.VERSION.SDK_INT >= 14) {
+                newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            }
+
+            if (Build.VERSION.SDK_INT >= 16) {
+                newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            }
+
+            if (Build.VERSION.SDK_INT >= 18) {
+                newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            }
+
+            getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+            fulls = true;
         }
-
-        if (Build.VERSION.SDK_INT >= 16) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        }
-
-        if (Build.VERSION.SDK_INT >= 18) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        }
-
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
     }
 }

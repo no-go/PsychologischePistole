@@ -1,24 +1,31 @@
 # Psychologische Pistole
 
-![logo](img/Icon.png)
+![logo](app/src/main/res/drawable/ic_launcher.png)
 
 Diese App zeigt eine schwarz-weiss Zeichnung von [Tino Bomelino](http://bomelino.de), auf der
 eine Pistole abgebildet ist. Es ist eine **Psychologische Pistole** weil sie
 nicht *Peng* macht, sondern **niemand liebt dich!**
 
 Das **niemand liebt dich!** wird abgespielt, wenn man das Handy/Smartphone
-kräftig schüttelt.
+kräftig schüttelt oder das Bild antippt.
+
+<a href="https://play.google.com/store/apps/details?id=click.dummer.psychologischepistole" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
+
+Tino Bomelinos Webseite: [http://bomelino.de](http://bomelino.de)
 
 Quellcode: [https://github.com/no-go/PsychologischePistole/](https://github.com/no-go/PsychologischePistole/)
+
+APK ohne Google Store: [app-release.apk](https://raw.githubusercontent.com/no-go/PsychologischePistole/master/app/app-release.apk)
 
 ## Was soll das?
 
 Aktuell ist es nur ein Versuchsbaloon. Mal sehn, was Tino dazu sagt. Kann sein,
-dass die App ruckzuck in der Tonne landet!!
+dass die App ruck zuck in der Tonne landet!!
 
 ## Tipp
 
-Bild und Ton wird unter **Documents/click.dummer.psychologischepistole** abgelegt. Wer will,
+Bild und Ton wird unter **Documents/click.dummer.psychologischepistole/** abgelegt. Wer will,
 kann diese selber anpassen. Den Ordner sieht man oft erst nach einem Neustart des Handys.
 
 ## Gewalt
