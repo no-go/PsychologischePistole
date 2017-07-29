@@ -9,10 +9,21 @@ nicht *Peng* macht, sondern **niemand liebt dich!**
 Das **niemand liebt dich!** wird abgespielt, wenn man das Handy/Smartphone
 kräftig schüttelt.
 
+Quellcode: [https://github.com/no-go/PsychologischePistole/](https://github.com/no-go/PsychologischePistole/)
+
 ## Was soll das?
 
-Aktuell ist es nur ein Versuchsbaloon. Mal sehn, das Tino dazu sagt. Kann sein,
+Aktuell ist es nur ein Versuchsbaloon. Mal sehn, was Tino dazu sagt. Kann sein,
 dass die App ruckzuck in der Tonne landet!!
+
+## Tipp
+
+Bild und Ton wird unter **Documents/click.dummer.psychologischepistole** abgelegt. Wer will,
+kann diese selber anpassen. Den Ordner sieht man oft erst nach einem Neustart des Handys.
+
+## Gewalt
+
+Bekennt Farbe und sagt NEIN zu psychologischer Gewalt jeder Art! Seid fair zueinander.
 
 ## License (without images)
 
