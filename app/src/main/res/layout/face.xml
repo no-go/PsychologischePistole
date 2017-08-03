@@ -19,6 +19,6 @@
         android:id="@+id/imageView"
         android:scaleType="fitCenter"
         android:onClick="pengNow"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/normal" />
 
 </LinearLayout>

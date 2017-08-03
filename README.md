@@ -23,7 +23,7 @@ APK ohne Google Store: [app-release.apk](https://raw.githubusercontent.com/no-go
 Aktuell ist es nur ein Versuchsbaloon. Mal sehn, was Tino dazu sagt. Kann sein,
 dass die App ruck zuck in der Tonne landet!!
 
-## Tipp
+## Tipp (Versionen unter v1.4)
 
 Bild und Ton wird unter **Documents/click.dummer.psychologischepistole/** abgelegt. Wer will,
 kann diese selber anpassen. Den Ordner sieht man oft erst nach einem Neustart des Handys.

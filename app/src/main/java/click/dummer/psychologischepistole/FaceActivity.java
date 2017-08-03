@@ -1,8 +1,10 @@
 package click.dummer.psychologischepistole;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -15,11 +17,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,134 +40,42 @@ public class FaceActivity extends Activity implements SensorEventListener {
     Sensor sensor;
     boolean fulls = false;
 
+    Bitmap normal;
+    Bitmap peng;
+
     MediaPlayer mp;
 
     ImageView imageView;
     Button btn;
-    ArrayList<Bitmap> bitmaps;
-    String[] bitmapNames = {"pengimg.jpg", "normal.jpg"};
-    String mp3Name = "peng.mp3";
-    int[] forces = {0, 40, 50};
+    int[] forces = {0, 25, 40};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PACKAGE_NAME = this.getPackageName();
         setContentView(R.layout.face);
+        normal = BitmapFactory.decodeResource(getResources(), R.drawable.normal);
+        peng = BitmapFactory.decodeResource(getResources(), R.drawable.pengimg);
+
+        mp = new MediaPlayer();
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.peng);
+        if(mp.isPlaying()) mp.pause();
+
         btn = (Button) findViewById(R.id.button);
         imageView = (ImageView) findViewById(R.id.imageView);
         sensorManager = (SensorManager) getSystemService(Service.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        String path = makeDir();
-        if(path != null) {
-            storeDefaultBitmaps(path);
-            storeMp3(path + mp3Name, R.raw.peng);
-            loadBitmaps(path);
-            setBackgrounds();
-        }
-        Uri uri = Uri.fromFile(new File(path + mp3Name));
-        mp = new MediaPlayer();
-        try {
-            mp.setDataSource(this, uri);
-            mp.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        imageView.setBackgroundColor(Color.WHITE);
+        btn.setBackgroundColor(Color.WHITE);
+        btn.setTextColor(Color.BLACK);
+
         toFullscreen();
     }
 
-    private String makeDir() {
-        File file = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            file = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                    PACKAGE_NAME
-            );
-        } else {
-            file = new File(Environment.getExternalStorageDirectory() + "/Documents/"+PACKAGE_NAME);
-        }
-
-        String path = file.getPath() + "/";
-        try {
-            file.mkdirs();
-            file = new File(path);
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.fileErr) + ": " + file.getPath(), Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        return path;
-    }
-
-    private void storeDefaultBitmaps(String path) {
-        storeMipmap(path + bitmapNames[0], R.mipmap.pengimg);
-        storeMipmap(path + bitmapNames[1], R.mipmap.normal);
-    }
-
-    private void storeMipmap(String filename, int res) {
-        Bitmap b = BitmapFactory.decodeResource(getResources(), res);
-        FileOutputStream out = null;
-        try {
-            File file = new File(filename);
-            if (!file.exists()) {
-                out = new FileOutputStream(filename);
-                b.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void storeMp3(String filename, int res) {
-        InputStream in_s = getResources().openRawResource(res);
-        FileOutputStream out = null;
-        try {
-            File file = new File(filename);
-            if (!file.exists()) {
-                byte[] b = new byte[in_s.available()];
-                in_s.read(b);
-                out = new FileOutputStream(filename);
-                out.write(b);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void loadBitmaps(String path) {
-        bitmaps = new ArrayList<>();
-        bitmaps.add(BitmapFactory.decodeFile(path + bitmapNames[0]));
-        bitmaps.add(BitmapFactory.decodeFile(path + bitmapNames[1]));
-    }
-
-    private void setBackgrounds() {
-        int pixel = bitmaps.get(0).getPixel(0,0);
-        imageView.setBackgroundColor(pixel);
-        btn.setBackgroundColor(pixel);
-        btn.setTextColor(Color.rgb(255 - Color.red(pixel), 255 - Color.green(pixel), 255 - Color.blue(pixel)));
-    }
-
     public void pengNow(View v) {
-        imageView.setImageBitmap(bitmaps.get(0));
-        if (!mp.isPlaying()) {
-            mp.start();
-        }
+        imageView.setImageBitmap(peng);
+        if (!mp.isPlaying()) mp.start();
     }
 
     public void website(View v) {
@@ -179,6 +93,7 @@ public class FaceActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         super.onPause();
+        mp.release();
         sensorManager.unregisterListener(this);
         fulls = false;
     }
@@ -188,7 +103,7 @@ public class FaceActivity extends Activity implements SensorEventListener {
         Float v = Math.abs(sensorEvent.values[0]) + Math.abs(sensorEvent.values[1]) + Math.abs(sensorEvent.values[2]);
         int val = Math.round(v);
         if (val < forces[1] && !mp.isPlaying()) {
-            imageView.setImageBitmap(bitmaps.get(1));
+            imageView.setImageBitmap(normal);
         } else if (val < forces[2]) {
             pengNow(new View(this));
         }
@@ -196,7 +111,6 @@ public class FaceActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {}
-
 
     public void toFullscreen() {
         if (!fulls) {

@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "click.dummer.psychologischepistole"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 14
         versionName "1.4"
     }
