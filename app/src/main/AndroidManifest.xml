@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="click.dummer.psychologischepistole">
 
-    <uses-feature android:name="android.hardware.Sensor" />
     <uses-sdk android:minSdkVersion="16" />
+
+    <uses-feature android:name="android.hardware.Sensor" android:required="false" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
