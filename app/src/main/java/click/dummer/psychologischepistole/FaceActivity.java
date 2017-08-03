@@ -93,7 +93,6 @@ public class FaceActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         super.onPause();
-        mp.release();
         sensorManager.unregisterListener(this);
         fulls = false;
     }
