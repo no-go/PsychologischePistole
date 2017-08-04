@@ -1,6 +1,6 @@
 # Psychologische Pistole
 
-![logo](app/src/main/res/drawable/ic_launcher.png)
+![kein Logo](app/src/main/res/drawable-hdpi/pengimg.jpg)
 
 Diese App zeigt eine schwarz-weiss Zeichnung von [Tino Bomelino](http://bomelino.de), auf der
 eine Pistole abgebildet ist. Es ist eine **Psychologische Pistole** weil sie
@@ -22,6 +22,11 @@ APK ohne Google Store: [app-release.apk](https://raw.githubusercontent.com/no-go
 
 Aktuell ist es nur ein Versuchsbaloon. Mal sehn, was Tino dazu sagt. Kann sein,
 dass die App ruck zuck in der Tonne landet!!
+
+## Version v1.3
+
+Mit der Version im Appstore hätte ich einen Preis mit "mehr Abstürze als Installationen"
+gewinnen können - hab mich dagegen entschieden.
 
 ## Tipp (Versionen unter v1.4)
 
